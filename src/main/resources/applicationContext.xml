@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task.xsd"
+       default-lazy-init="false">
+
+    <context:property-placeholder location="classpath:db.properties" ignore-unresolvable="true"/>
+
+    <context:component-scan base-package="com.zhw"/>
+
+
+    <bean id="mainDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="driverClassName">
+            <value>${db.main.driver}</value>
+        </property>
+        <property name="url">
+            <value>${db.main.url}</value>
+        </property>
+
+        <property name="username">
+            <value>${db.main.username}</value>
+        </property>
+        <property name="password">
+            <value>${db.main.password}</value>
+        </property>
+
+    </bean>
+
+
+    <!-- myBatis文件 -->
+    <bean id="mainSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="mainDataSource"/>
+        <!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+        <property name="mapperLocations" value="classpath:/mapping/*.xml"/>
+
+    </bean>
+
+    <!-- DAO接口所在，Spring会自动查找类-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.zhw.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="mainSqlSessionFactory"/>
+
+    </bean>
+
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="mainDataSource"></property>
+    </bean>
+
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+
+    <task:executor id="executor" pool-size="25"/>
+
+    <task:annotation-driven executor="executor"/>
+
+
+</beans>
