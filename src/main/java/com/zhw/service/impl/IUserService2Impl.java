@@ -36,7 +36,6 @@ public class IUserService2Impl implements IUserService2 {
 
     }
 
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void funRequireException() throws Exception {
         save(new UserEntity("max"));
@@ -51,7 +50,6 @@ public class IUserService2Impl implements IUserService2 {
 
     }
 
-    @Override
     @Transactional(propagation = Propagation.NESTED)
     public void funNestException() throws Exception {
         save(new UserEntity("edward"));
@@ -64,7 +62,6 @@ public class IUserService2Impl implements IUserService2 {
 
     }
 
-    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void funRequireNewException() throws Exception {
         save(new UserEntity("laura"));

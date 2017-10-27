@@ -25,7 +25,6 @@ public class IUserServiceImpl implements IUserService {
     @Resource
     IUserService2 userService2;
 
-    @Override
     @Transactional
     public void fun1() throws Exception {
 
@@ -43,7 +42,6 @@ public class IUserServiceImpl implements IUserService {
     }
 //        ((IUserService) AopContext.currentProxy()).funRequireException();
 
-    @Override
     @Transactional
     public void fun2() throws Exception {
         //嵌套事务的使用场景
@@ -63,7 +61,6 @@ public class IUserServiceImpl implements IUserService {
 
     }
 
-    @Override
     @Transactional
     public void fun3() throws Exception {
 
@@ -89,7 +86,6 @@ public class IUserServiceImpl implements IUserService {
         //而调用者出现unchecked异常,却能触发所调用的nested事务的回滚.
     }
 
-    @Override
     @Transactional
     public void fun4() throws Exception {
         //而REQUIRES_NEW,当被调用时,就相当于暂停(挂起)当前事务,先开一个新的事务去执行REQUIRES_NEW的方法,如果REQUIRES_NEW中的异常得到了处理
@@ -106,7 +102,6 @@ public class IUserServiceImpl implements IUserService {
         }
     }
 
-    @Override
     @Transactional
     public void fun5() throws Exception {
 
@@ -124,7 +119,6 @@ public class IUserServiceImpl implements IUserService {
 
     }
 
-    @Override
     @Transactional
     public void fun6() throws Exception {
 
@@ -139,7 +133,6 @@ public class IUserServiceImpl implements IUserService {
     }
 
 
-    @Override
     @Transactional
     public void fun7() throws Exception {
 
@@ -156,7 +149,6 @@ public class IUserServiceImpl implements IUserService {
 
     }
 
-    @Override
     @Transactional
     public void fun8() throws Exception {
         ((IUserService) AopContext.currentProxy()).funRequire();
@@ -178,7 +170,6 @@ public class IUserServiceImpl implements IUserService {
 
     }
 
-    @Override
     public void funNoneException() throws Exception {
         save(new UserEntity("doge"));
         throwExcp();
@@ -200,7 +191,6 @@ public class IUserServiceImpl implements IUserService {
     }
 
     //启动默认事务的方法,抛出RuntimeException
-    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void funRequireException() throws Exception {
         save(new UserEntity("max"));
@@ -218,7 +208,6 @@ public class IUserServiceImpl implements IUserService {
 
 
     //启动嵌套事务的方法,但会抛出异常
-    @Override
     @Transactional(propagation = Propagation.NESTED)
     public void funNestException() throws Exception {
         save(new UserEntity("edward"));
@@ -233,7 +222,6 @@ public class IUserServiceImpl implements IUserService {
     }
 
     //REQUIRES_NEW事务的方法,但会抛出异常
-    @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void funRequireNewException() throws Exception {
         save(new UserEntity("laura"));
